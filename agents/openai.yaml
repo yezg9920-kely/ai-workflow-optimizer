@@ -1,0 +1,4 @@
+interface:
+  display_name: "智能体配置体检与优化"
+  short_description: "审计指令与技能，减少误触发和无效流程，保留真实边界并验证结果"
+  default_prompt: "使用 $ai-workflow-optimizer 审计并优化我的智能体配置，保留备份，完成相关验证，并解释实际改动与未验证项。"
