@@ -1,8 +1,6 @@
 name: Repair ai-workflow-optimizer v2
 on:
   push:
-    paths:
-      - ".github/workflows/repair-ai-workflow-optimizer-v2.yml"
   workflow_dispatch:
 permissions:
   contents: write
@@ -49,4 +47,3 @@ jobs:
           tree="$(git -C "$clean_dir" write-tree)"
           commit="$(printf '%s\n' 'Publish complete ai-workflow-optimizer Skill' | git -C "$clean_dir" commit-tree "$tree" -p "$parent")"
           git -C "$clean_dir" -c http.extraheader="AUTHORIZATION: bearer $GH_TOKEN" push origin "$commit:refs/heads/main"
-
