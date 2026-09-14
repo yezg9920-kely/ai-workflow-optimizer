@@ -19,6 +19,8 @@ jobs:
           rm -rf "$clean_dir"
           mkdir -p "$clean_dir"
           git -C "$clean_dir" init
+          git -C "$clean_dir" config user.name "yezg9920-kely"
+          git -C "$clean_dir" config user.email "255814951+yezg9920-kely@users.noreply.github.com"
           git -C "$clean_dir" remote add origin "$remote_url"
           git -C "$clean_dir" fetch origin main
           parent="$(git -C "$clean_dir" rev-parse refs/remotes/origin/main)"
