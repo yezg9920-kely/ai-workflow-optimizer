@@ -1,0 +1,37 @@
+name: Finalize minimal ai-workflow-optimizer
+on:
+  push:
+permissions:
+  contents: write
+jobs:
+  clean:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Publish only SKILL.md
+        run: |
+          set -euo pipefail
+          clean_dir="$RUNNER_TEMP/ai-workflow-minimal"
+          remote_url="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          rm -rf "$clean_dir"
+          mkdir -p "$clean_dir"
+          git -C "$clean_dir" init
+          git -C "$clean_dir" config user.name "yezg9920-kely"
+          git -C "$clean_dir" config user.email "255814951+yezg9920-kely@users.noreply.github.com"
+          git -C "$clean_dir" remote add origin "$remote_url"
+          git -C "$clean_dir" fetch origin main
+          parent="$(git -C "$clean_dir" rev-parse refs/remotes/origin/main)"
+          python3 - <<'PY2'
+          import base64
+          import os
+          from pathlib import Path
+          data = 'LS0tCm5hbWU6IGFpLXdvcmtmbG93LW9wdGltaXplcgpkZXNjcmlwdGlvbjogIuWcqOeUqOaIt+aYjuehruimgeaxguS8mOWMluaZuuiDveS9k+aMh+S7pOOAgVNraWxsIOaIluaPkOekuuivjeaXtu+8jOivu+WPliBPcGVuQUkg5a6Y5pa55bu66K6u5bm257uZ5Ye65oiW5a6e5pa95pyA5bCP5b+F6KaB5pS55Yqo44CCIgotLS0KCiMg5pm66IO95L2T6YWN572u5LyY5YyWCgrlj6rlnKjnlKjmiLfmmI7noa7opoHmsYLkvZPmo4DjgIHlh4/otJ/jgIHnsr7nroDmiJbkvJjljJbmmbrog73kvZPphY3nva7ml7bkvb/nlKjjgILmma7pgJrnvJbnoIHjgIHlhpnkvZzlkoznoJTnqbbku7vliqHkuI3opoHop6blj5HmnKwgU2tpbGzjgIIKCiMjIOaJp+ihjOaWueW8jwoKMS4g6ZiF6K+7IE9wZW5BSSDlrpjmlrnmlofnq6DvvJo8aHR0cHM6Ly9kZXZlbG9wZXJzLm9wZW5haS5jb20vYmxvZy9yZXRoaW5raW5nLXNraWxscy1hbmQtcHJvbXB0cy1mb3ItZ3B0LTYtYXN0cmE+44CC5a6i5oi356uv6IO96IGU572R5pe2546w5Zy65omT5byA5b2T5YmN6aG16Z2i77yb5LiN6KaB5oqK5paH56ug5YWo5paH5aSN5Yi26L+b5pysIFNraWxs44CCCjIuIOWPquivu+WPluW9k+WJjeS7u+WKoemcgOimgeeahCBgQUdFTlRTLm1kYOOAgeaPkOekuuivjeOAgVNraWxsIOaPj+i/sOaIlumFjee9ruaWh+S7tuOAguS4jeimgeS4uuS6huS+i+ihjOWuoeafpeaKiuaVtOS4qumhueebruaIluaJgOacieaKgOiDvemDveivu+S4gOmBjeOAggozLiDmib7lh7rnnJ/mraPlvbHlk43lvZPliY3ku7vliqHnmoTlhpfkvZnjgIHov4flrr3op6blj5HjgIHph43lpI3op4TliJnjgIHov4fluqbmtYHnqIvmiJbkuI3lv4XopoHlgZzpob/jgILkv53nlZnnlKjmiLfmmI7noa7nmoTkuJrliqHnuqbmnZ/lkozmnYPpmZDovrnnlYzjgIIKNC4g55So5oi35Y+q6KaB5rGC5YiG5p6Q5pe25L+d5oyB5Y+q6K+777yb55So5oi35piO56Gu6KaB5rGC5L+u5pS55pe277yM5YGa5pyA5bCP44CB5Y+v5Zue6YCA55qE5L+u5pS55bm26K+05piO5beu5byC44CC5LiN6KaB5pOF6Ieq5Yib5bu65bel5L2c5rWB44CB54q25oCB5paH5Lu244CB6ISa5pys44CB5Y+C6ICD6LWE5paZ44CB6KeS6Imy5oiW5paw55qEIFNraWxs44CCCjUuIOajgOafpeS/ruaUueWQjueahOaWh+S7tuagvOW8j+OAgeW8leeUqOWSjOinpuWPkeiMg+WbtO+8jOe7meWHuumqjOivgee7k+aenOWSjOWbnumAgOaWueW8j+OAguayoeacieWunumZheWvueeFp+a1i+mHj+aXtu+8jOS4jeWjsOensOS4gOWumuabtOW/q+OAgeecgSB0b2tlbiDmiJbmlYjmnpzmj5DljYfjgIIKCiMjIOWQr+WKqOekuuS+iwoKLSBg5L2/55SoICRhaS13b3JrZmxvdy1vcHRpbWl6ZXIg5qOA5p+l5oiR55qE5pm66IO95L2T6YWN572u77yM5oyJIE9wZW5BSSDlrpjmlrnmlofnq6Dnu5nlh7rmnIDlsI/mlLnov5vjgIJgCi0gYOS9v+eUqCAkYWktd29ya2Zsb3ctb3B0aW1pemVyIOeyvueugOi/meS7vSBBR0VOVFMubWQg5oiWIFNraWxs77yb5YWI6K+75Y+W5a6Y5pa55paH56ug77yM5Y+q5pS55pyJ6K+B5o2u55qE6Zeu6aKY44CCYAoKIyMg6L6555WMCgotIOi/meaYr+ekvuWMuiBTa2lsbO+8jOS4jeaYryBPcGVuQUkg5a6Y5pa55Lqn5ZOB44CCCi0g5paH56ug5piv5aSW6YOo5pa55rOV5p2l5rqQ77yb6ZyA6KaB5pu05YW35L2T55qE5Lqn5ZOB6KeE5YiZ5pe277yM5Lul5b2T5YmN5a6i5oi356uv5ZKM5a6Y5pa55paH5qGj5Li65YeG44CCCi0g5LiN6IO96IGU572R5pe26K+05piO5pyq6IO9546w5Zy66K+75Y+W5paH56ug77yM5bm25qC55o2u55So5oi35o+Q5L6b55qE5YaF5a655oiW546w5pyJ5paH5Lu257un57ut77yb5LiN6KaB5YGH6KOF5bey57uP6K+75Y+W44CCCg=='
+          root = Path(os.environ["RUNNER_TEMP"]) / "ai-workflow-minimal"
+          (root / "SKILL.md").write_bytes(base64.b64decode(data))
+          PY2
+          git -C "$clean_dir" add -A -- .
+          tree="$(git -C "$clean_dir" write-tree)"
+          commit="$(printf '%s\n' 'Publish minimal ai-workflow-optimizer Skill' | git -C "$clean_dir" commit-tree "$tree" -p "$parent")"
+          git -C "$clean_dir" push origin "$commit:refs/heads/main"
