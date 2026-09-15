@@ -1,6 +1,6 @@
 ---
 name: ai-workflow-optimizer
-description: "在用户明确要求优化智能体指令、Skill 或提示词时，读取 OpenAI 官方建议并给出或实施最小必要改动。"
+description: "在用户明确要求检查、精简或优化智能体指令、Skill 或提示词时，读取 OpenAI 官方建议并给出或实施最小必要改动。"
 ---
 
 # 智能体配置优化
